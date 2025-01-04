@@ -1,0 +1,9 @@
+# Ignore everything
+*
+
+# Exclude directories (so that we can include .c and .h files in them)
+!*/
+
+# Include .c and .h files
+!*.c
+!*.h
