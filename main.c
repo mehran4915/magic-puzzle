@@ -6,6 +6,7 @@
 enum GameStatus { CONTINUE, STOP };
 
 void display_menu(int *main_menu_option);
+void ask_name_size(int *n, char (*name)[30]);
 void shuffle_puzzle(int n, int (*puzzle)[n]);
 
 int main() {
@@ -22,23 +23,9 @@ int main() {
 
     // the show start
     // taking the name and n
-    char name[30];
-    printf("what should I call you: ");
-    scanf("%s", name);
     int n;
-    while (1) {
-      printf("Enter the size of puzzle you want to have (2 <= n <= 9): ");
-      if (scanf("%d", &n) != 1) {
-        while (getchar() != '\n')
-          ;
-        puts("Invalid input. Please enter an integer between 2 and 9.");
-      } else if (n >= 2 && n <= 9) {
-        break;
-      } else {
-        while (getchar() != '\n')
-          ;
-      }
-    }
+    char name[30];
+    ask_name_size(&n, &name);
 
     // creating the intial puzzle
     int puzzle[n][n];
@@ -69,6 +56,24 @@ void display_menu(int *main_menu_option) {
     puts("See you later....");
   }
 }
+
+void ask_name_size(int *n, char (*name)[30]) {
+  printf("what should I call you: ");
+  scanf("%s", name);
+  while (1) {
+    printf("Enter the size of puzzle you want to have (2 <= n <= 9): ");
+    if (scanf("%d", n) != 1) {
+      while (getchar() != '\n')
+        ;
+      puts("Invalid input. Please enter an integer between 2 and 9.");
+    } else if (*n >= 2 && *n <= 9) {
+      break;
+    } else {
+      while (getchar() != '\n')
+        ;
+    }
+  }
+};
 
 void shuffle_puzzle(int n, int (*puzzle)[n]) {
   bool used[n][n];
