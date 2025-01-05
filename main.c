@@ -3,35 +3,20 @@
 #include <stdlib.h>
 #include <time.h>
 
-
 enum GameStatus { CONTINUE, STOP };
 
-void shufflePuzzle(int n, int (*puzzle)[n]);
+void display_menu(int *main_menu_option);
+void shuffle_puzzle(int n, int (*puzzle)[n]);
 
 int main() {
   enum GameStatus game;
   game = CONTINUE;
   while (game == CONTINUE) {
-    // main menu
     int main_menu_option;
-    while (1) {
-      printf("\nWelcome to magic puzzle game\nplease choose an "
-             "option\noption 1: "
-             "start\noption 2: manual\noption 3: exit\n-> ");
-      scanf("%d", &main_menu_option);
-      if (main_menu_option == 1 || main_menu_option == 2 ||
-          main_menu_option == 3) {
-        break;
-      } else {
-        puts("enter a valid number between 1 and 3");
-      }
-    }
+    display_menu(&main_menu_option);
     if (main_menu_option == 2) {
-      puts("this is the manual");
       continue;
-    }
-    if (main_menu_option == 3) {
-      puts("See you later....");
+    } else if (main_menu_option == 3) {
       break;
     }
 
@@ -58,13 +43,34 @@ int main() {
     // creating the intial puzzle
     int puzzle[n][n];
     srand((unsigned int)time(NULL));
-    shufflePuzzle(n, puzzle);
+    shuffle_puzzle(n, puzzle);
 
     return 0;
   }
 }
 
-void shufflePuzzle(int n, int (*puzzle)[n]) {
+void display_menu(int *main_menu_option) {
+  while (1) {
+    printf("\nWelcome to magic puzzle game\nplease choose an "
+           "option\noption 1: "
+           "start\noption 2: manual\noption 3: exit\n-> ");
+    scanf("%d", main_menu_option);
+    if (*main_menu_option == 1 || *main_menu_option == 2 ||
+        *main_menu_option == 3) {
+      break;
+    } else {
+      puts("enter a valid number between 1 and 3");
+    }
+  }
+  if (*main_menu_option == 2) {
+    puts("this is the manual");
+  }
+  if (*main_menu_option == 3) {
+    puts("See you later....");
+  }
+}
+
+void shuffle_puzzle(int n, int (*puzzle)[n]) {
   bool used[n][n];
   for (int i = 0; i < n; i++) {
     for (int j = 0; j < n; j++) {
