@@ -15,7 +15,7 @@ int main() {
           main_menu_option == 3) {
         break;
       } else {
-        printf("enter a valid number between 1 and 3");
+        printf("enter a valid number between 1 and 3\n");
       }
     }
     if (main_menu_option == 2) {
