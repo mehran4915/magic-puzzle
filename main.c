@@ -1,6 +1,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <time.h>
 
 enum GameStatus { CONTINUE, STOP };
@@ -8,6 +9,7 @@ enum GameStatus { CONTINUE, STOP };
 void display_menu(int *main_menu_option);
 void ask_name_size(int *n, char (*name)[30]);
 void shuffle_puzzle(int n, int (*puzzle)[n]);
+bool win_check(int n, int (*puzzle)[n]);
 
 int main() {
   enum GameStatus game;
@@ -59,7 +61,7 @@ void display_menu(int *main_menu_option) {
 
 void ask_name_size(int *n, char (*name)[30]) {
   printf("what should I call you: ");
-  scanf("%s", name);
+  scanf("%29s", name);
   while (1) {
     printf("Enter the size of puzzle you want to have (2 <= n <= 9): ");
     if (scanf("%d", n) != 1) {
@@ -93,4 +95,17 @@ void shuffle_puzzle(int n, int (*puzzle)[n]) {
     used[random1][random2] = true;
     puzzle[random1][random2] = i;
   }
+}
+
+bool win_check(int n, int (*puzzle)[n]) {
+  int correctNumber = 1;
+  for (int i = 0; i < n; i++) {
+    for (int j = 0; j < n; j++) {
+      if (puzzle[i][j] != correctNumber && puzzle[n - 1][n - 1] != 0) {
+        return false;
+      }
+      correctNumber++;
+    }
+  }
+  return true;
 }
