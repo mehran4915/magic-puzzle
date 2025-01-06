@@ -1,3 +1,4 @@
+#include <conio.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -10,6 +11,7 @@ void display_menu(int *main_menu_option);
 void ask_name_size(int *n, char (*name)[30]);
 void shuffle_puzzle(int n, int (*puzzle)[n]);
 bool win_check(int n, int (*puzzle)[n]);
+void print_table(int n, int (*puzzle)[n], char (*name)[30], int moves);
 
 int main() {
   enum GameStatus game;
@@ -33,9 +35,35 @@ int main() {
     int puzzle[n][n];
     srand((unsigned int)time(NULL));
     shuffle_puzzle(n, puzzle);
+    int initialPuzzle[n][n];
+    memcpy(initialPuzzle, puzzle, (size_t)n);
 
-    return 0;
+    int moves = 0;
+    char c;
+    while (!win_check(n, puzzle)) {
+      print_table(n, puzzle, &name, moves);
+      c = _getch();
+      if (c == 'w') {
+        moves++;
+      } else if (c == 'a') {
+        moves++;
+      } else if (c == 's') {
+        moves++;
+      } else if (c == 'd') {
+        moves++;
+      } else if (c == 'q') {
+        break;
+      } else if (c == 'e') {
+        memcpy(puzzle, initialPuzzle, (size_t)n);
+        moves = 0;
+      } else {
+      }
+    }
+    if (c == 'q') {
+      continue;
+    }
   }
+  return 0;
 }
 
 void display_menu(int *main_menu_option) {
@@ -61,7 +89,7 @@ void display_menu(int *main_menu_option) {
 
 void ask_name_size(int *n, char (*name)[30]) {
   printf("what should I call you: ");
-  scanf("%29s", name);
+  scanf("%s", name);
   while (1) {
     printf("Enter the size of puzzle you want to have (2 <= n <= 9): ");
     if (scanf("%d", n) != 1) {
@@ -75,7 +103,7 @@ void ask_name_size(int *n, char (*name)[30]) {
         ;
     }
   }
-};
+}
 
 void shuffle_puzzle(int n, int (*puzzle)[n]) {
   bool used[n][n];
@@ -108,4 +136,22 @@ bool win_check(int n, int (*puzzle)[n]) {
     }
   }
   return true;
+}
+
+void print_table(int n, int (*puzzle)[n], char (*name)[30], int moves) {
+  system("cls");
+  puts("MAGIC PUZZLE");
+  puts(*name);
+  printf("+-----+-----+-----+\n");
+  for (int i = 0; i < n; i++) {
+    for (int j = 0; j < n; j++) {
+      if (puzzle[i][j != 0]) {
+        printf("| %*d ", (5 - 1) / 2 + 1, puzzle[i][j]);
+      }
+    }
+    printf("|\n");
+    printf("+-----+-----+-----+\n");
+  }
+  printf("\n%d\n", moves);
+  printf("\n-> ");
 }
