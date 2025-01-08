@@ -42,7 +42,9 @@ int main() {
     srand((unsigned int)time(NULL));
     shuffle_puzzle(n, puzzle, &empty_row, &empty_coloumn);
     int initialPuzzle[n][n];
-    memcpy(initialPuzzle, puzzle, (size_t)n);
+    int initial_empty_row = empty_row;
+    int initial_empty_column = empty_coloumn;
+    memcpy(initialPuzzle, puzzle, sizeof(puzzle));
 
     char c;
     while (!win_check(n, puzzle)) {
@@ -99,8 +101,11 @@ int main() {
       } else if (c == 'q') {
         break;
       } else if (c == 'e') {
-        memcpy(puzzle, initialPuzzle, (size_t)n);
+        memcpy(puzzle, initialPuzzle, sizeof(puzzle));
+        empty_row = initial_empty_row;
+        empty_coloumn = initial_empty_column;
         moves = 0;
+        print_table(n, puzzle, &name, moves);
       } else {
       }
     }
@@ -193,7 +198,7 @@ void print_table(int n, int (*puzzle)[n], char (*name)[30], int moves) {
   puts("MAGIC PUZZLE");
   puts(*name);
   printf("+");
-  for (int i = 0; i < n; i++) {
+  for (int k = 0; k < n; k++) {
     printf("-----+");
   }
   printf("\n");
@@ -207,7 +212,7 @@ void print_table(int n, int (*puzzle)[n], char (*name)[30], int moves) {
     }
     printf("|\n");
     printf("+");
-    for (int i = 0; i < n; i++) {
+    for (int k = 0; k < n; k++) {
       printf("-----+");
     }
     printf("\n");
