@@ -7,11 +7,15 @@
 
 enum GameStatus { CONTINUE, STOP };
 
+int moves = 0;
+
 void display_menu(int *main_menu_option);
 void ask_name_size(int *n, char (*name)[30]);
-void shuffle_puzzle(int n, int (*puzzle)[n]);
+void shuffle_puzzle(int n, int (*puzzle)[n], int *empty_row,
+                    int *empty_coloumn);
 bool win_check(int n, int (*puzzle)[n]);
 void print_table(int n, int (*puzzle)[n], char (*name)[30], int moves);
+void swap(int *a, int *b);
 
 int main() {
   enum GameStatus game;
@@ -33,24 +37,65 @@ int main() {
 
     // creating the intial puzzle
     int puzzle[n][n];
+    int empty_row;
+    int empty_coloumn;
     srand((unsigned int)time(NULL));
-    shuffle_puzzle(n, puzzle);
+    shuffle_puzzle(n, puzzle, &empty_row, &empty_coloumn);
     int initialPuzzle[n][n];
     memcpy(initialPuzzle, puzzle, (size_t)n);
 
-    int moves = 0;
     char c;
     while (!win_check(n, puzzle)) {
       print_table(n, puzzle, &name, moves);
       c = _getch();
-      if (c == 'w') {
+      if (c == 'w') { // move down
+        if (empty_row < n - 1) {
+          swap(&puzzle[empty_row][empty_coloumn],
+               &puzzle[empty_row++][empty_coloumn]);
+        } else {
+          for (int i = n - 1; i > 0;) {
+            swap(&puzzle[i][empty_coloumn], &puzzle[i--][empty_coloumn]);
+          }
+          empty_row = 0;
+        }
         moves++;
-      } else if (c == 'a') {
+        print_table(n, puzzle, &name, moves);
+      } else if (c == 'a') { // right
+        if (empty_coloumn < n - 1) {
+          swap(&puzzle[empty_row][empty_coloumn],
+               &puzzle[empty_row][empty_coloumn++]);
+        } else {
+          for (int i = n - 1; i > 0;) {
+            swap(&puzzle[empty_row][i], &puzzle[empty_row][i--]);
+          }
+          empty_coloumn = 0;
+        }
         moves++;
-      } else if (c == 's') {
+        print_table(n, puzzle, &name, moves);
+      } else if (c == 's') { // up
+        if (empty_row != 0) {
+          swap(&puzzle[empty_row][empty_coloumn],
+               &puzzle[empty_row--][empty_coloumn]);
+        } else {
+          for (int i = 0; i < n - 1;) {
+            swap(&puzzle[i][empty_coloumn], &puzzle[i++][empty_coloumn]);
+          }
+          empty_row = n - 1;
+        }
         moves++;
-      } else if (c == 'd') {
+        print_table(n, puzzle, &name, moves);
+      } else if (c == 'd') { // left
+        if (empty_coloumn != 0) {
+          swap(&puzzle[empty_row][empty_coloumn],
+               &puzzle[empty_row][empty_coloumn--]);
+        } else {
+          for (int i = 0; i < n - 1;) {
+            swap(&puzzle[empty_row][i], &puzzle[empty_row][i++]);
+          }
+          empty_coloumn = n - 1;
+        }
         moves++;
+        print_table(n, puzzle, &name, moves);
       } else if (c == 'q') {
         break;
       } else if (c == 'e') {
@@ -105,7 +150,8 @@ void ask_name_size(int *n, char (*name)[30]) {
   }
 }
 
-void shuffle_puzzle(int n, int (*puzzle)[n]) {
+void shuffle_puzzle(int n, int (*puzzle)[n], int *empty_row,
+                    int *empty_coloumn) {
   bool used[n][n];
   for (int i = 0; i < n; i++) {
     for (int j = 0; j < n; j++) {
@@ -122,6 +168,10 @@ void shuffle_puzzle(int n, int (*puzzle)[n]) {
     } while (used[random1][random2]);
     used[random1][random2] = true;
     puzzle[random1][random2] = i;
+    if (i == 0) {
+      *empty_coloumn = random2;
+      *empty_row = random1;
+    }
   }
 }
 
@@ -129,7 +179,7 @@ bool win_check(int n, int (*puzzle)[n]) {
   int correctNumber = 1;
   for (int i = 0; i < n; i++) {
     for (int j = 0; j < n; j++) {
-      if (puzzle[i][j] != correctNumber && puzzle[n - 1][n - 1] != 0) {
+      if (puzzle[i][j] != correctNumber && (i != n - 1 && j != n - 1)) {
         return false;
       }
       correctNumber++;
@@ -145,13 +195,21 @@ void print_table(int n, int (*puzzle)[n], char (*name)[30], int moves) {
   printf("+-----+-----+-----+\n");
   for (int i = 0; i < n; i++) {
     for (int j = 0; j < n; j++) {
-      if (puzzle[i][j != 0]) {
+      if (puzzle[i][j] != 0) {
         printf("| %*d ", (5 - 1) / 2 + 1, puzzle[i][j]);
+      } else {
+        printf("|     ");
       }
     }
     printf("|\n");
     printf("+-----+-----+-----+\n");
   }
-  printf("\n%d\n", moves);
+  printf("\nMoves: %d\n", moves);
   printf("\n-> ");
+}
+
+void swap(int *a, int *b) {
+  *a = *a ^ *b;
+  *b = *a ^ *b;
+  *a = *a ^ *b;
 }
