@@ -192,7 +192,11 @@ void print_table(int n, int (*puzzle)[n], char (*name)[30], int moves) {
   system("cls");
   puts("MAGIC PUZZLE");
   puts(*name);
-  printf("+-----+-----+-----+\n");
+  printf("+");
+  for (int i = 0; i < n; i++) {
+    printf("-----+");
+  }
+  printf("\n");
   for (int i = 0; i < n; i++) {
     for (int j = 0; j < n; j++) {
       if (puzzle[i][j] != 0) {
@@ -202,7 +206,11 @@ void print_table(int n, int (*puzzle)[n], char (*name)[30], int moves) {
       }
     }
     printf("|\n");
-    printf("+-----+-----+-----+\n");
+    printf("+");
+    for (int i = 0; i < n; i++) {
+      printf("-----+");
+    }
+    printf("\n");
   }
   printf("\nMoves: %d\n", moves);
   printf("\n-> ");
