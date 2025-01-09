@@ -5,8 +5,6 @@
 #include <string.h>
 #include <time.h>
 
-enum GameStatus { CONTINUE, STOP };
-
 int moves = 0;
 
 void display_menu(int *main_menu_option);
@@ -18,9 +16,7 @@ void print_table(int n, int (*puzzle)[n], char (*name)[30], int moves);
 void swap(int *a, int *b);
 
 int main() {
-  enum GameStatus game;
-  game = CONTINUE;
-  while (game == CONTINUE) {
+  while (1) {
     int main_menu_option;
     display_menu(&main_menu_option);
     if (main_menu_option == 2) {
@@ -109,6 +105,10 @@ int main() {
       } else {
       }
     }
+    if (win_check(n, puzzle)) {
+      print_table(n, puzzle, &name, moves);
+      puts("\nYou Win!");
+    }
     if (c == 'q') {
       continue;
     }
@@ -184,10 +184,16 @@ bool win_check(int n, int (*puzzle)[n]) {
   int correctNumber = 1;
   for (int i = 0; i < n; i++) {
     for (int j = 0; j < n; j++) {
-      if (puzzle[i][j] != correctNumber && (i != n - 1 && j != n - 1)) {
-        return false;
+      if (i == n - 1 && j == n - 1) {
+        if (puzzle[i][j] != 0) {
+          return false;
+        }
+      } else {
+        if (puzzle[i][j] != correctNumber) {
+          return false;
+        }
+        correctNumber++;
       }
-      correctNumber++;
     }
   }
   return true;
