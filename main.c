@@ -109,6 +109,7 @@ int main() {
       print_table(n, puzzle, &name, moves);
       puts("\nYou Win!");
     }
+    moves = 0;
     if (c == 'q') {
       continue;
     }
