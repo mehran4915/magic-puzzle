@@ -130,7 +130,19 @@ void display_menu(int *main_menu_option) {
     }
   }
   if (*main_menu_option == 2) {
-    puts("this is the manual");
+    system("cls");
+    printf("\nMANUAL: \n\n WE hope that you will have a good time playing this "
+           "game.\n "
+           "When the game "
+           "start you need to enter your name and the size of puzzle(n).\n "
+           "Later on "
+           "you will see your shuffled and unsolved puzzle, your mission is to "
+           "solve the puzzle.\n\n How you will win? \n When the numbers in the "
+           "puzzle are arranged in order from left to right and top to bottom, "
+           "the game ends. \n For example: 1 2 3\n              4 5 6\n        "
+           "     "
+           " 7 8  \n You can move the empty space by using these buttons: \n   "
+           "W: down\n   S: up\n   A: right\n   D: left\n\nGOOD LUCK!!!\n");
   }
   if (*main_menu_option == 3) {
     puts("See you later....");
