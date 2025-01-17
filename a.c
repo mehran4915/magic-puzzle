@@ -30,6 +30,14 @@ bool is_win(int n, int (*puzzle)[n]);
 void swap(int *a, int *b);
 void print_puzzle(int n, int puzzle[n][n], char first_name[20],
                   char last_name[20]);
+void move_left(int n, int puzzle[n][n], int *zero_row, int *zero_column,
+               char first_name[20], char last_name[20]);
+void move_right(int n, int puzzle[n][n], int *zero_row, int *zero_column,
+                char first_name[20], char last_name[20]);
+void move_down(int n, int puzzle[n][n], int *zero_row, int *zero_column,
+               char first_name[20], char last_name[20]);
+void move_up(int n, int puzzle[n][n], int *zero_row, int *zero_column,
+             char first_name[20], char last_name[20]);
 
 int main() {
   while (1) {
@@ -67,53 +75,13 @@ int main() {
       print_puzzle(n, puzzle, first_name, last_name);
       c = _getch();
       if (c == DOWN || c == DOWN_ARROW) {
-        if (zero_row < n - 1) {
-          swap(&puzzle[zero_row][zero_column],
-               &puzzle[zero_row++][zero_column]);
-        } else {
-          for (int i = n - 1; i > 0;) {
-            swap(&puzzle[i][zero_column], &puzzle[i--][zero_column]);
-          }
-          zero_row = 0;
-        }
-        moves++;
-        print_puzzle(n, puzzle, first_name, last_name);
+        move_down(n, puzzle, &zero_row, &zero_column, first_name, last_name);
       } else if (c == RIGHT || c == RIGHT_ARROW) {
-        if (zero_column < n - 1) {
-          swap(&puzzle[zero_row][zero_column],
-               &puzzle[zero_row][zero_column++]);
-        } else {
-          for (int i = n - 1; i > 0;) {
-            swap(&puzzle[zero_row][i], &puzzle[zero_row][i--]);
-          }
-          zero_column = 0;
-        }
-        moves++;
-        print_puzzle(n, puzzle, first_name, last_name);
+        move_right(n, puzzle, &zero_row, &zero_column, first_name, last_name);
       } else if (c == UP || c == UP_ARROW) {
-        if (zero_row != 0) {
-          swap(&puzzle[zero_row][zero_column],
-               &puzzle[zero_row--][zero_column]);
-        } else {
-          for (int i = 0; i < n - 1;) {
-            swap(&puzzle[i][zero_column], &puzzle[i++][zero_column]);
-          }
-          zero_row = n - 1;
-        }
-        moves++;
-        print_puzzle(n, puzzle, first_name, last_name);
+        move_up(n, puzzle, &zero_row, &zero_column, first_name, last_name);
       } else if (c == LEFT || c == LEFT_ARROW) {
-        if (zero_column != 0) {
-          swap(&puzzle[zero_row][zero_column],
-               &puzzle[zero_row][zero_column--]);
-        } else {
-          for (int i = 0; i < n - 1;) {
-            swap(&puzzle[zero_row][i], &puzzle[zero_row][i++]);
-          }
-          zero_column = n - 1;
-        }
-        moves++;
-        print_puzzle(n, puzzle, first_name, last_name);
+        move_left(n, puzzle, &zero_row, &zero_column, first_name, last_name);
       } else if (c == QUIT) {
         break;
       } else if (c == RESETGAME) {
@@ -305,4 +273,65 @@ void print_puzzle(int n, int puzzle[n][n], char first_name[20],
   }
   printf("\nMoves: %d\n", moves);
   printf("\n-> ");
+}
+
+void move_down(int n, int puzzle[n][n], int *zero_row, int *zero_column,
+               char first_name[20], char last_name[20]) {
+  if (*zero_row < n - 1) {
+    swap(&puzzle[*zero_row][*zero_column],
+         &puzzle[*zero_row + 1][*zero_column]);
+    (*zero_row)++;
+  } else {
+    for (int i = n - 1; i > 0; i--) {
+      swap(&puzzle[i][*zero_column], &puzzle[i - 1][*zero_column]);
+    }
+    *zero_row = 0;
+  }
+  moves++;
+  print_puzzle(n, puzzle, first_name, last_name);
+}
+void move_up(int n, int puzzle[n][n], int *zero_row, int *zero_column,
+             char first_name[20], char last_name[20]) {
+  if (*zero_row > 0) {
+    swap(&puzzle[*zero_row][*zero_column],
+         &puzzle[*zero_row - 1][*zero_column]);
+    (*zero_row)--;
+  } else {
+    for (int i = 0; i < n - 1; i++) {
+      swap(&puzzle[i][*zero_column], &puzzle[i + 1][*zero_column]);
+    }
+    *zero_row = n - 1;
+  }
+  moves++;
+  print_puzzle(n, puzzle, first_name, last_name);
+}
+void move_right(int n, int puzzle[n][n], int *zero_row, int *zero_column,
+                char first_name[20], char last_name[20]) {
+  if (*zero_column < n - 1) {
+    swap(&puzzle[*zero_row][*zero_column],
+         &puzzle[*zero_row][*zero_column + 1]);
+    (*zero_column)++;
+  } else {
+    for (int i = n - 1; i > 0; i--) {
+      swap(&puzzle[*zero_row][i], &puzzle[*zero_row][i - 1]);
+    }
+    *zero_column = 0;
+  }
+  moves++;
+  print_puzzle(n, puzzle, first_name, last_name);
+}
+void move_left(int n, int puzzle[n][n], int *zero_row, int *zero_column,
+               char first_name[20], char last_name[20]) {
+  if (*zero_column > 0) {
+    swap(&puzzle[*zero_row][*zero_column],
+         &puzzle[*zero_row][*zero_column - 1]);
+    (*zero_column)--;
+  } else {
+    for (int i = 0; i < n - 1; i++) {
+      swap(&puzzle[*zero_row][i], &puzzle[*zero_row][i + 1]);
+    }
+    *zero_column = n - 1;
+  }
+  moves++;
+  print_puzzle(n, puzzle, first_name, last_name);
 }
