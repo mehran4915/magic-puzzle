@@ -19,6 +19,7 @@
 #define RESET "\033[0m"
 #define YELLOW "\033[33m"
 #define GREEN "\033[32m"
+#define CHEATCODE 'f'
 
 int moves = 0;
 
@@ -104,6 +105,15 @@ int main() {
           }
         }
         moves = 0;
+      } else if (c == CHEATCODE) {
+        int trueNumber = 1;
+        for (int i = 0; i < n; i++) {
+          for (int j = 0; j < n; j++) {
+            puzzle[i][j] = trueNumber;
+            trueNumber++;
+          }
+        }
+        puzzle[n - 1][n - 1] = 0;
       }
     }
     if (is_win(n, puzzle)) {
@@ -242,7 +252,7 @@ void print_puzzle(int n, int puzzle[n][n], char first_name[20],
   printf("%s  %s\n", first_name, last_name);
 
   for (int j = 0; j < n; j++) {
-    printf("------");
+    printf("-----");
   }
   printf("-\n");
 
@@ -267,7 +277,7 @@ void print_puzzle(int n, int puzzle[n][n], char first_name[20],
     printf("|\n");
 
     for (int j = 0; j < n; j++) {
-      printf("------");
+      printf("-----");
     }
     printf("-\n");
   }
