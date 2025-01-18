@@ -97,8 +97,8 @@ int main() {
         print_puzzle(n, puzzle, first_name, last_name);
       } else if (c == NEWSHUFFLE) {
         shuffle_puzzle(n, puzzle, &zero_row, &zero_column);
-        int initial_zero_row = zero_row;
-        int initial_zero_column = zero_column;
+        initial_zero_row = zero_row;
+        initial_zero_column = zero_column;
         for (int i = 0; i < n; i++) {
           for (int j = 0; j < n; j++) {
             initialPuzzle[i][j] = puzzle[i][j];
