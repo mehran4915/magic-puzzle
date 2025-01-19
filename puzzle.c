@@ -102,7 +102,6 @@ int main() {
         empty_coloumn = initial_empty_column;
         moves = 0;
         print_table(n, puzzle, &name, moves);
-      } else {
       }
     }
     if (win_check(n, puzzle)) {
@@ -110,9 +109,6 @@ int main() {
       puts("\nYou Win!");
     }
     moves = 0;
-    if (c == 'q') {
-      continue;
-    }
   }
   return 0;
 }
