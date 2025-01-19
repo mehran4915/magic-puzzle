@@ -144,10 +144,6 @@ int main() {
       print_puzzle(n, puzzle, first_name, last_name);
       puts("\nYou Win!");
     }
-    moves = 0;
-    if (c == QUIT) {
-      continue;
-    }
   }
   return 0;
 }
@@ -248,7 +244,7 @@ void shuffle_puzzle(int n, int puzzle[n][n], int *zero_row, int *zero_column) {
       int random;
       // انتخاب عددی که قبلا انتخاب نشده
       do {
-        // عددی رندوم بین 0 تا n^2
+        // عددی رندوم بین 0 تا n^2 - 1
         random = rand() % total;
       } while (used[random]);
 
